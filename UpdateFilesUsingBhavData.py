@@ -18,6 +18,15 @@ def log_failure(reason):
     with open(log_file, "a") as log:
         log.write(f"{reason}\n")
 
+
+def parse_date_flexibly(date_str):
+    for fmt in ("%d-%m-%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(date_str, fmt).strftime("%Y%m%d")
+        except ValueError:
+            continue
+    return None  # or raise an error
+
 def download_securitywisedata(START_DATE, END_DATE, SYMBOL):
     sample_csvs = [f for f in os.listdir(securityDataFolder) if f.endswith(".csv")]
     first_csv = os.path.join(securityDataFolder, sample_csvs[0])
@@ -139,6 +148,27 @@ def updateFiles(date):
                             tryFromNSE_df = df
                         else:
                             tryFromNSE_df = pd.concat([tryFromNSE_df, df], ignore_index=True)
+                if not tryFromNSE_df.empty:
+                    for index, row1 in tryFromNSE_df.iterrows():
+                        if row1[f'SERIES'] == "EQ" and (row1[f'DELIV_QTY'] == "-" or row1[f'DELIV_PER'] == "-"):
+                            date_str = parse_date_flexibly(row1['DATE1'])
+                            bhavdata_path = "BhavData" + "\\" + date_str + "_NSE.csv"
+                            if os.path.exists(bhavdata_path):
+                                df1 = pd.read_csv(bhavdata_path)
+                                df1.columns = df1.columns.str.strip()
+                                df1['SYMBOL'] = df1['SYMBOL'].astype(str).str.strip()
+                                df1['SERIES'] = df1['SERIES'].astype(str).str.strip()
+                                df1['DATE1'] = df1['DATE1'].astype(str).str.strip()
+                                df1['DATE1'] = pd.to_datetime(df1['DATE1'], format="%d-%b-%Y").dt.strftime("%d-%m-%Y")
+                                df1['DATE1'] = df1['DATE1'].astype(str).str.strip()
+                                filtered_df = df1[
+                                    (df1.iloc[:, 0] == row1.iloc[0]) &
+                                    (df1.iloc[:, 1] == row1.iloc[1]) &
+                                    (df1.iloc[:, 2] == row1.iloc[2])
+                                ]
+                                if len(filtered_df) > 0:
+                                    tryFromNSE_df.iat[index, 13] = filtered_df.iloc[0, 13]
+                                    tryFromNSE_df.iat[index, 14] = filtered_df.iloc[0, 14]
                 symbol_df = tryFromNSE_df
                 if not symbol_df.empty:
                     symbol_df.to_csv(securityDataFile, index=False)
@@ -150,9 +180,6 @@ def updateFiles(date):
                 symbol_df = pd.concat([symbol_df, row_df], ignore_index=True)
             symbol_df.to_csv(securityDataFile, index=False)
             print(f"{securityDataFile}     updated")
-
-updateFiles("2025-07-28")
-exit()
 
 todayDate = datetime.now(ist).strftime("%Y-%m-%d")
 yesterdayDate = (datetime.now(ist) - timedelta(days=1)).strftime("%Y-%m-%d")
