@@ -19,4 +19,4 @@ jobs:
         python-version: '3.11'
 
     - name: Run update script
-      run: python update_script.py
+      run: python UpdateFilesUsingBhavData.py
