@@ -78,7 +78,8 @@ def download_bhavdata(date, save_dir="BhavData"):
                     return
                 # print(f"✅ Downloaded: {filename}")
             else:
-                log_failure(f"❌ Failed: {yyyymmdd} | Status: {response.status_code}")
+                None
+                # log_failure(f"❌ Failed: {yyyymmdd} | Status: {response.status_code}")
         except Exception as e:
             print(f"💥 Error for {yyyymmdd}: {e}")
         time.sleep(2)
