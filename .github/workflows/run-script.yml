@@ -2,8 +2,11 @@ name: Run Auto Update
 
 on:
   schedule:
-    - cron: '30 13 * * *'   # Every day at 13:30 UTC (7:00 PM IST)
-  workflow_dispatch:         # Manual trigger option
+    - cron: '30 13 * * *'   # 7:00 PM IST
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   run-script:
