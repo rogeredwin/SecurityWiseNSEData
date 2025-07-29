@@ -18,9 +18,5 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies (optional)
-      run: |
-        pip install -r requirements.txt || true
-
     - name: Run update script
       run: python update_script.py
