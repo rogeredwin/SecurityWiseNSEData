@@ -1,0 +1,26 @@
+name: Run Auto Update
+
+on:
+  schedule:
+    - cron: '30 13 * * *'   # Every day at 13:30 UTC (7:00 PM IST)
+  workflow_dispatch:         # Allows manual run from GitHub UI
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies (optional)
+      run: |
+        pip install -r requirements.txt || true
+
+    - name: Run update script
+      run: python update_script.py
