@@ -2,7 +2,7 @@
 
 This project provides a comprehensive collection of **NSE Security-wise Equity Bhav Data**, aggregated from multiple sources.
 The dataset includes **delivery volume data** and is designed to be as complete and consistent as possible.
-It is automatically updated using the latest `FullBhavData` files.
+It is automatically updated using the latest `BhavData` files.
 Only equity-related series data is included/updated in the SecurityWiseData files.
 The relavant series are **SM**, **BE**, **BZ**, **EQ**, **ST**, **SZ**, and **BL**.  
 For more information, see the [NSE Legend of Series](https://www.nseindia.com/market-data/legend-of-series).
