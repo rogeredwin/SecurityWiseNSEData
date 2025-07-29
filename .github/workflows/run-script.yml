@@ -18,5 +18,10 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Install required Python packages
+      run: |
+        pip install pandas requests pytz
+
     - name: Run update script
       run: python UpdateFilesUsingBhavData.py
+
