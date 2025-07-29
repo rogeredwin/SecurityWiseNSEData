@@ -3,7 +3,7 @@ name: Run Auto Update
 on:
   schedule:
     - cron: '30 13 * * *'   # Every day at 13:30 UTC (7:00 PM IST)
-  workflow_dispatch:         # Allows manual run from GitHub UI
+  workflow_dispatch:         # Manual trigger option
 
 jobs:
   run-script:
@@ -18,10 +18,16 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install required Python packages
-      run: |
-        pip install pandas requests pytz
+    - name: Install dependencies
+      run: pip install pandas requests pytz
 
     - name: Run update script
       run: python UpdateFilesUsingBhavData.py
 
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Auto-update bhav data: $(date -u '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git push
