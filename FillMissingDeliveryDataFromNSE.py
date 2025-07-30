@@ -81,8 +81,10 @@ def process_symbol(symbolFile):
         symbolFile_df.to_csv(symbolFile, index=False)
         print(f"{symbolFile_df} updated")
 
-# Use threading for faster execution
+def main():
+    files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith('.csv')]
+    with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+        executor.map(process_file, files)
+
 if __name__ == "__main__":
-    files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith(".csv")]
-    with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:  # Adjust max_workers as per your CPU/Network
-        executor.map(process_symbol, files)
+    main()
