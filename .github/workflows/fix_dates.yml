@@ -20,7 +20,7 @@ jobs:
       run: pip install pandas
 
     - name: Run date normalization script
-      run: python normalise dates.py
+      run: python normaliseDates.py
 
     - name: Commit and push changes
       run: |
