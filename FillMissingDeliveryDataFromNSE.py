@@ -82,6 +82,7 @@ def process_symbol(symbolFile):
 
 def main():
     files = os.listdir(securityWiseDataFolder)
+    print(files)
     for file in files:
         process_symbol(file)
 
