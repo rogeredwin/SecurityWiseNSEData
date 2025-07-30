@@ -78,9 +78,9 @@ def getDeliveryDataFromNSE(symbol):
     return delivery_data_df
 
 def process_symbol(symbolFile):
-    symbolFile = symbolFile.replace("SecurityWiseData/", "")
     print(f"🟢 Processing: {symbolFile}")
-    symbol_path = os.path.join(securityWiseDataFolder, symbolFile)
+    symbol_path = symbolFile
+    symbolFile = symbolFile.replace("SecurityWiseData/", "")   
     try:
         symbolFile_df = pd.read_csv(symbol_path)
         # print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}")
