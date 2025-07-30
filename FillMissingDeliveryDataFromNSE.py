@@ -122,7 +122,8 @@ def process_symbol(symbolFile):
 
 def main():
     try:
-        files = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
+        file_paths = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
+        files = [os.path.basename(f) for f in file_paths]
         # print(f"📦 CSV files found: {files}")
     except Exception as e:
         print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}")
