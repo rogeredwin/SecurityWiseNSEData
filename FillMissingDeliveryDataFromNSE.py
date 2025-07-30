@@ -77,7 +77,6 @@ def process_symbol(symbolFile):
             change = True
             symbolFile_df.at[index, 'DELIV_QTY'] = filtered_df['DELIV_QTY'].values[0]
             symbolFile_df.at[index, 'DELIV_PER'] = filtered_df['DELIV_PER'].values[0]
-
     if change:
         symbolFile_df.to_csv(symbolFile, index=False)
         print(f"{symbolFile_df} updated")
@@ -85,5 +84,5 @@ def process_symbol(symbolFile):
 # Use threading for faster execution
 if __name__ == "__main__":
     files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith(".csv")]
-    with ThreadPoolExecutor(max_workers=6) as executor:  # Adjust max_workers as per your CPU/Network
+    with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:  # Adjust max_workers as per your CPU/Network
         executor.map(process_symbol, files)
