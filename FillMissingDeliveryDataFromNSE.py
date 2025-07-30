@@ -65,6 +65,8 @@ def process_symbol(symbolFile):
     if len(symbolFile_df) == 0:
         return
     delivery_data_df = getDeliveryDataFromNSE(symbolFile[:-4])
+    if delivery_data_df.empty:
+        return
     change = False
     for index, row in symbolFile_df.iterrows():
         filtered_df = delivery_data_df[
