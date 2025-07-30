@@ -114,6 +114,7 @@ def updateFiles(date):
     bhavfile_df['SERIES'] = bhavfile_df['SERIES'].astype(str).str.strip()
     bhavfile_df['DATE1'] = bhavfile_df['DATE1'].astype(str).str.strip()
     bhavfile_df['DATE1'] = pd.to_datetime(bhavfile_df['DATE1'], format="%d-%b-%Y").dt.strftime("%d-%m-%Y")
+    bhavfile_df['DATE1'] = bhavfile_df['DATE1'].astype(str).str.strip()
     bhavfile_df = bhavfile_df[bhavfile_df['SERIES'].isin(valid_series)]
     for idx, row in bhavfile_df.iterrows():
         securityDataFile = os.path.join(securityDataFolder, row['SYMBOL'] + ".csv")
