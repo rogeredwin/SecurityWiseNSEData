@@ -9,28 +9,28 @@ from concurrent.futures import ThreadPoolExecutor
 import glob
 
 # Print working directory and files
-print("🔍 Current working directory:", os.getcwd())
-print("📁 Files in directory:", os.listdir())
+print("🔍 Current working directory:", os.getcwd(), flush=True)
+print("📁 Files in directory:", os.listdir(), flush=True)
 
 # Change to script directory
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     os.chdir(script_dir)
-    print("✅ Changed to script directory:", script_dir)
+    print("✅ Changed to script directory:", script_dir, flush=True)
 except Exception as e:
-    print("❌ Failed to change directory:", e)
+    print("❌ Failed to change directory:", e, flush=True)
 
 ist = pytz.timezone("Asia/Kolkata")
 
 securityWiseDataFolder = "SecurityWiseData"
 
 if not os.path.exists(securityWiseDataFolder):
-    print(f"❌ Folder '{securityWiseDataFolder}' does not exist.")
+    print(f"❌ Folder '{securityWiseDataFolder}' does not exist.", flush=True)
 else:
-    print(f"✅ Found folder '{securityWiseDataFolder}'")
+    print(f"✅ Found folder '{securityWiseDataFolder}'", flush=True)
 
 def getDeliveryDataFromNSE(symbol):
-    # print(f"🔄 Fetching delivery data from NSE for {symbol}")
+    # print(f"🔄 Fetching delivery data from NSE for {symbol}", flush=True)
     ref_columns = ['SYMBOL', 'SERIES', 'DATE1', 'NO_OF_TRADES', 'DELIV_QTY', 'DELIV_PER']
     delivery_data_df = pd.DataFrame(columns=ref_columns)
     for year in range(1996, datetime.now(ist).year + 1):
@@ -44,9 +44,9 @@ def getDeliveryDataFromNSE(symbol):
             try:
                 # print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
                 response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-                # print(f"📡 Status code: {response.status_code}")
+                # print(f"📡 Status code: {response.status_code}", flush=True)
                 if "<!DOCTYPE html>" in response.text[:100]:
-                    print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}")
+                    print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}", flush=True)
                     continue
                 if response.status_code == 200 and response.content:
                     try:
@@ -58,11 +58,11 @@ def getDeliveryDataFromNSE(symbol):
                             delivery_data_df = pd.concat([delivery_data_df, df1], ignore_index=True)
                         break
                     except Exception as parse_error:
-                        print(f"⚠️ Failed to parse CSV: {symbol}_{start_date}_{end_date} | Error: {parse_error}")
+                        print(f"⚠️ Failed to parse CSV: {symbol}_{start_date}_{end_date} | Error: {parse_error}", flush=True)
                 else:
-                    print(f"❌ HTTP Error: {symbol}_{start_date}_{end_date} | Status: {response.status_code}")
+                    print(f"❌ HTTP Error: {symbol}_{start_date}_{end_date} | Status: {response.status_code}", flush=True)
             except Exception as e:
-                print(f"💥 Request Exception: {symbol}_{start_date}_{end_date} | Error: {e}")
+                print(f"💥 Request Exception: {symbol}_{start_date}_{end_date} | Error: {e}", flush=True)
             time.sleep(2)
     if not delivery_data_df.empty:
         delivery_data_df['SYMBOL'] = delivery_data_df['SYMBOL'].astype(str).str.strip()
@@ -74,18 +74,18 @@ def getDeliveryDataFromNSE(symbol):
         )
         delivery_data_df.dropna(subset=['DATE1'], inplace=True)
         delivery_data_df['DATE1'] = delivery_data_df['DATE1'].dt.strftime("%d-%m-%Y")
-    # print(f"✅ Completed fetching delivery data for {symbol}")
+    # print(f"✅ Completed fetching delivery data for {symbol}", flush=True)
     return delivery_data_df
 
 def process_symbol(symbolFile):
-    print(f"🟢 Processing: {symbolFile}")
+    print(f"🟢 Processing: {symbolFile}", flush=True)
     symbol_path = symbolFile
     symbolFile = symbolFile.replace("SecurityWiseData/", "")   
     try:
         symbolFile_df = pd.read_csv(symbol_path)
-        # print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}")
+        # print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}", flush=True)
     except Exception as e:
-        print(f"❌ Failed to read {symbol_path}: {e}")
+        print(f"❌ Failed to read {symbol_path}: {e}", flush=True)
         return
 
     symbolFile_df = symbolFile_df[
@@ -95,12 +95,12 @@ def process_symbol(symbolFile):
         (symbolFile_df['DELIV_QTY'] == "-") | (symbolFile_df['DELIV_PER'] == "-")
     ]
     if symbolFile_df.empty:
-        # print(f"ℹ️ No missing delivery data in {symbolFile}")
+        # print(f"ℹ️ No missing delivery data in {symbolFile}", flush=True)
         return
 
     delivery_data_df = getDeliveryDataFromNSE(symbolFile[:-4])
     if delivery_data_df.empty:
-        # print(f"⚠️ No delivery data fetched for {symbolFile[:-4]}")
+        # print(f"⚠️ No delivery data fetched for {symbolFile[:-4]}", flush=True)
         return
 
     change = False
@@ -119,22 +119,22 @@ def process_symbol(symbolFile):
             symbolFile_df.to_csv(symbol_path, index=False)
             # print(f"💾 Updated: {symbol_path}")
         except Exception as e:
-            print(f"❌ Failed to write updated CSV: {e}")
+            print(f"❌ Failed to write updated CSV: {e}", flush=True)
 
 def main():
     try:
         files = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
-        # print(f"📦 CSV files found: {files}")
+        # print(f"📦 CSV files found: {files}", flush=True)
     except Exception as e:
-        print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}")
+        print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}", flush=True)
         return
 
     if not files:
-        print("⚠️ No .csv files found to process.")
+        print("⚠️ No .csv files found to process.", flush=True)
         return
 
     max_workers = os.cpu_count()  # Safe default for GitHub Actions
-    print(f"🚀 Starting ThreadPoolExecutor with {max_workers} workers")
+    print(f"🚀 Starting ThreadPoolExecutor with {max_workers} workers", flush=True)
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         executor.map(process_symbol, files)
 
