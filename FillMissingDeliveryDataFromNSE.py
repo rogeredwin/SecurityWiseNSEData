@@ -78,6 +78,7 @@ def getDeliveryDataFromNSE(symbol):
     return delivery_data_df
 
 def process_symbol(symbolFile):
+    symbolFile = symbolFile.replace("SecurityWiseData/", "")
     print(f"🟢 Processing: {symbolFile}")
     symbol_path = os.path.join(securityWiseDataFolder, symbolFile)
     try:
@@ -122,8 +123,7 @@ def process_symbol(symbolFile):
 
 def main():
     try:
-        file_paths = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
-        files = [os.path.basename(f) for f in file_paths]
+        files = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
         # print(f"📦 CSV files found: {files}")
     except Exception as e:
         print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}")
