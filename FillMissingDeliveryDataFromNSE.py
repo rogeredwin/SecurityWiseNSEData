@@ -81,7 +81,7 @@ def process_symbol(symbolFile):
         print(f"{symbolFile_df} updated")
 
 def main():
-    files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith('.csv')]
+    files = os.listdir(securityWiseDataFolder)
     for file in files:
         process_symbol(file)
 
