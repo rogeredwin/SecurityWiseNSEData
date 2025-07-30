@@ -1,0 +1,34 @@
+name: Fix CSV Dates
+
+on:
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  fix-dates:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install pandas
+      run: pip install pandas
+
+    - name: Run date normalization script
+      run: python normalise dates.py
+
+    - name: Commit and push changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add SecurityWiseData/*.csv
+        git commit -m "Normalize DATE1 column to DD-MM-YYYY" || echo "No changes to commit"
+        git push
+      env:
+        # This is automatically handled for GitHub-hosted runners
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
