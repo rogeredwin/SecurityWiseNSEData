@@ -29,7 +29,7 @@ else:
     print(f"✅ Found folder '{securityWiseDataFolder}'")
 
 def getDeliveryDataFromNSE(symbol):
-    print(f"🔄 Fetching delivery data from NSE for {symbol}")
+    # print(f"🔄 Fetching delivery data from NSE for {symbol}")
     ref_columns = ['SYMBOL', 'SERIES', 'DATE1', 'NO_OF_TRADES', 'DELIV_QTY', 'DELIV_PER']
     delivery_data_df = pd.DataFrame(columns=ref_columns)
     for year in range(1996, datetime.now(ist).year + 1):
@@ -43,7 +43,7 @@ def getDeliveryDataFromNSE(symbol):
             try:
                 # print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
                 response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-                # print(f"📡 Status code: {response.status_code}")
+                print(f"📡 Status code: {response.status_code}")
                 if "<!DOCTYPE html>" in response.text[:100]:
                     print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}")
                     continue
@@ -73,7 +73,7 @@ def getDeliveryDataFromNSE(symbol):
         )
         delivery_data_df.dropna(subset=['DATE1'], inplace=True)
         delivery_data_df['DATE1'] = delivery_data_df['DATE1'].dt.strftime("%d-%m-%Y")
-    print(f"✅ Completed fetching delivery data for {symbol}")
+    # print(f"✅ Completed fetching delivery data for {symbol}")
     return delivery_data_df
 
 def process_symbol(symbolFile):
@@ -115,21 +115,13 @@ def process_symbol(symbolFile):
     if change:
         try:
             symbolFile_df.to_csv(symbol_path, index=False)
-            print(f"💾 Updated: {symbol_path}")
+            # print(f"💾 Updated: {symbol_path}")
         except Exception as e:
             print(f"❌ Failed to write updated CSV: {e}")
 
 def main():
     try:
-        print("📂 Listing files in SecurityWiseData:")
-        try:
-            all_files = os.listdir(securityWiseDataFolder)
-            print("📃 All files:", all_files)
-            files = [f for f in all_files if f.endswith('.csv')]
-            print("✅ CSV files found:", files)
-        except Exception as e:
-            print(f"❌ Error reading SecurityWiseData folder: {e}")
-            return
+        files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith('.csv')]
         print(f"📦 CSV files found: {files}")
     except Exception as e:
         print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}")
@@ -139,7 +131,7 @@ def main():
         print("⚠️ No .csv files found to process.")
         return
 
-    max_workers = os.cpu_count()
+    max_workers = os.cpu_count()  # Safe default for GitHub Actions
     print(f"🚀 Starting ThreadPoolExecutor with {max_workers} workers")
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         executor.map(process_symbol, files)
