@@ -43,7 +43,7 @@ def getDeliveryDataFromNSE(symbol):
             try:
                 # print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
                 response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-                print(f"📡 Status code: {response.status_code}")
+                # print(f"📡 Status code: {response.status_code}")
                 if "<!DOCTYPE html>" in response.text[:100]:
                     print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}")
                     continue
@@ -81,7 +81,7 @@ def process_symbol(symbolFile):
     symbol_path = os.path.join(securityWiseDataFolder, symbolFile)
     try:
         symbolFile_df = pd.read_csv(symbol_path)
-        print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}")
+        # print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}")
     except Exception as e:
         print(f"❌ Failed to read {symbol_path}: {e}")
         return
@@ -93,12 +93,12 @@ def process_symbol(symbolFile):
         (symbolFile_df['DELIV_QTY'] == "-") | (symbolFile_df['DELIV_PER'] == "-")
     ]
     if symbolFile_df.empty:
-        print(f"ℹ️ No missing delivery data in {symbolFile}")
+        # print(f"ℹ️ No missing delivery data in {symbolFile}")
         return
 
     delivery_data_df = getDeliveryDataFromNSE(symbolFile[:-4])
     if delivery_data_df.empty:
-        print(f"⚠️ No delivery data fetched for {symbolFile[:-4]}")
+        # print(f"⚠️ No delivery data fetched for {symbolFile[:-4]}")
         return
 
     change = False
