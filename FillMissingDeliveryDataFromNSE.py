@@ -41,9 +41,9 @@ def getDeliveryDataFromNSE(symbol):
         )
         for attempt in range(10):
             try:
-                print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
+                # print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
                 response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-                print(f"📡 Status code: {response.status_code}")
+                # print(f"📡 Status code: {response.status_code}")
                 if "<!DOCTYPE html>" in response.text[:100]:
                     print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}")
                     continue
