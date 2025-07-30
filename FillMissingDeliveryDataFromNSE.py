@@ -6,6 +6,7 @@ from datetime import datetime
 import pytz
 import time
 from concurrent.futures import ThreadPoolExecutor
+import glob
 
 # Print working directory and files
 print("🔍 Current working directory:", os.getcwd())
@@ -121,8 +122,8 @@ def process_symbol(symbolFile):
 
 def main():
     try:
-        files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith('.csv')]
-        print(f"📦 CSV files found: {files}")
+        files = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
+        # print(f"📦 CSV files found: {files}")
     except Exception as e:
         print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}")
         return
