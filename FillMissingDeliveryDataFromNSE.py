@@ -121,7 +121,15 @@ def process_symbol(symbolFile):
 
 def main():
     try:
-        files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith('.csv')]
+        print("📂 Listing files in SecurityWiseData:")
+        try:
+            all_files = os.listdir(securityWiseDataFolder)
+            print("📃 All files:", all_files)
+            files = [f for f in all_files if f.endswith('.csv')]
+            print("✅ CSV files found:", files)
+        except Exception as e:
+            print(f"❌ Error reading SecurityWiseData folder: {e}")
+            return
         print(f"📦 CSV files found: {files}")
     except Exception as e:
         print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}")
