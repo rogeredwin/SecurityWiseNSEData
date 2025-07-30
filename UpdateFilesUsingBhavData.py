@@ -47,6 +47,7 @@ def download_securitywisedata(START_DATE, END_DATE, SYMBOL):
                         df['SERIES'] = df['SERIES'].astype(str).str.strip()
                         df['DATE1'] = df['DATE1'].astype(str).str.strip()
                         df['DATE1'] = pd.to_datetime(df['DATE1'], format="%d-%b-%Y").dt.strftime("%d-%m-%Y")
+                        df['DATE1'] = df['DATE1'].astype(str).str.strip()
                     return df # success, exit the function
                 except Exception as parse_error:
                     print(f"⚠️ Failed to parse CSV: {SYMBOL}_{START_DATE}_{END_DATE}")
