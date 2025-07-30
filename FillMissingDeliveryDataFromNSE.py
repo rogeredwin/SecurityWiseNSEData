@@ -84,7 +84,7 @@ def process_symbol(symbolFile):
 def main():
     files = [f for f in os.listdir(securityWiseDataFolder) if f.endswith('.csv')]
     with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
-        executor.map(process_file, files)
+        executor.map(process_symbol, files)
 
 if __name__ == "__main__":
     main()
