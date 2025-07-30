@@ -26,7 +26,7 @@ def getDeliveryDataFromNSE(symbol):
         )
         for attempt in range(10):
             try:
-                response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+                response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout = 10)
                 if response.status_code == 200 and response.content:
                     try:
                         df1 = pd.read_csv(StringIO(response.text))
