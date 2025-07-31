@@ -74,11 +74,14 @@ def getDeliveryDataFromNSE(symbol):
         )
         delivery_data_df.dropna(subset=['DATE1'], inplace=True)
         delivery_data_df['DATE1'] = delivery_data_df['DATE1'].dt.strftime("%d-%m-%Y")
+        delivery_data_df = delivery_data_df[
+        delivery_data_df['SERIES'].isin(["EQ", "BL", "SM"])
+    ]
     # print(f"✅ Completed fetching delivery data for {symbol}", flush=True)
     return delivery_data_df
 
 def process_symbol(symbolFile):
-    print(f"🟢 Processing: {symbolFile}", flush=True)
+    # print(f"🟢 Processing: {symbolFile}", flush=True)
     symbol_path = symbolFile
     symbolFile = symbolFile.replace("SecurityWiseData/", "")   
     try:
@@ -96,11 +99,13 @@ def process_symbol(symbolFile):
     ]
     if symbolFile_df.empty:
         # print(f"ℹ️ No missing delivery data in {symbolFile}", flush=True)
+        print(f"Complete: {symbol_path}", flush = True)
         return
 
     delivery_data_df = getDeliveryDataFromNSE(symbolFile[:-4])
     if delivery_data_df.empty:
         # print(f"⚠️ No delivery data fetched for {symbolFile[:-4]}", flush=True)
+        print(f"Unchanged1: {symbol_path}", flush = True)
         return
 
     change = False
@@ -117,9 +122,11 @@ def process_symbol(symbolFile):
     if change:
         try:
             symbolFile_df.to_csv(symbol_path, index=False)
-            # print(f"💾 Updated: {symbol_path}")
+            print(f"Updated: {symbol_path}", flush = True)
         except Exception as e:
             print(f"❌ Failed to write updated CSV: {e}", flush=True)
+    else:
+        print(f"Unchanged2: {symbol_path}", flush = True)
 
 def main():
     try:
