@@ -105,8 +105,8 @@ def process_symbol(symbolFile):
     symbol_path = symbolFile
     symbolFile = symbolFile.replace("SecurityWiseData/", "")
     first_char = symbolFile[0].upper()
-        if first_char not in allowed_letters:
-            return
+    if first_char not in allowed_letters:
+        return
     try:
         symbolFile_df = pd.read_csv(symbol_path)
         # print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}", flush=True)
