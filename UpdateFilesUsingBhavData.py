@@ -94,7 +94,8 @@ def fetch_symbolchange_file():
         response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
         if response.status_code == 200 and response.content:
             df = pd.read_csv(StringIO(response.text))
-            df.to_csv(filename, index=False)           
+            df.to_csv(filename, index=False)
+            print("symbolchange file updated", flush = True)
     except Exception as e:
         log_failure(f"Failed to fetch symbolchange file from NSE, use local fallback: {e}")
     symbolchange_df = pd.read_csv(filename, header = None, names=["Name", "Old Symbol", "New Symbol", "Change Date"])
