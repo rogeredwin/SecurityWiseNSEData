@@ -24,6 +24,24 @@ ist = pytz.timezone("Asia/Kolkata")
 
 securityWiseDataFolder = "SecurityWiseData"
 
+# === Mapping from day to starting alphabets ===
+day_to_alphabets = {
+    'Monday':    ['S', 'F'],
+    'Tuesday':   ['A', 'K', 'U'],
+    'Wednesday': ['M', 'D', 'L', 'W'],
+    'Thursday':  ['P', 'N', 'J', 'O'],
+    'Friday':    ['B', 'R', 'H', 'Q'],
+    'Saturday':  ['G', 'T', 'V', 'Z'],
+    'Sunday':    ['I', 'C', 'E', 'Y', 'X'],
+}
+
+# === Get today's day name ===
+today_day = datetime.datetime.today(ist).strftime('%A')
+allowed_letters = day_to_alphabets.get(today_day, [])
+
+print(f"📅 Today is {today_day}")
+print(f"✅ Processing files starting with: {allowed_letters}\n")
+
 if not os.path.exists(securityWiseDataFolder):
     print(f"❌ Folder '{securityWiseDataFolder}' does not exist.", flush=True)
 else:
@@ -42,11 +60,13 @@ def getDeliveryDataFromNSE(symbol):
         )
         for attempt in range(10):
             try:
+                time.sleep(0.5)
                 # print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
                 response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
                 # print(f"📡 Status code: {response.status_code}", flush=True)
                 if "<!DOCTYPE html>" in response.text[:100]:
                     print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}", flush=True)
+                    time.sleep(10)
                     continue
                 if response.status_code == 200 and response.content:
                     try:
@@ -83,7 +103,10 @@ def getDeliveryDataFromNSE(symbol):
 def process_symbol(symbolFile):
     # print(f"🟢 Processing: {symbolFile}", flush=True)
     symbol_path = symbolFile
-    symbolFile = symbolFile.replace("SecurityWiseData/", "")   
+    symbolFile = symbolFile.replace("SecurityWiseData/", "")
+    first_char = symbolFile[0].upper()
+        if first_char not in allowed_letters:
+            return
     try:
         symbolFile_df = pd.read_csv(symbol_path)
         # print(f"📄 Loaded file: {symbol_path} | Rows: {len(symbolFile_df)}", flush=True)
