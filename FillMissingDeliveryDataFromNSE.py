@@ -58,20 +58,11 @@ def getDeliveryDataFromNSE(symbol):
         url = (
             f"https://www.nseindia.com/api/historicalOR/generateSecurityWiseHistoricalData?from={start_date}&to={end_date}&symbol={sym}&type=deliverable&series=ALL&csv=true"
         )
-        headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Referer": "https://www.nseindia.com/",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-            "Connection": "keep-alive"
-        }
         for attempt in range(10):
             try:
                 time.sleep(10)
                 # print(f"🌐 Attempting request for {symbol} year {year}, try {attempt+1}")
-                # response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
-                response = requests.get(url, headers=headers, timeout=10)
+                response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=10)
                 # print(f"📡 Status code: {response.status_code}", flush=True)
                 if "<!DOCTYPE html>" in response.text[:100]:
                     print(f"🛑 NSE blocked or returned HTML for {symbol} {start_date}-{end_date}", flush=True)
@@ -173,7 +164,8 @@ def main():
         print("⚠️ No .csv files found to process.", flush=True)
         return
 
-    max_workers = os.cpu_count()  # Safe default for GitHub Actions
+    #max_workers = os.cpu_count()  # Safe default for GitHub Actions
+    max_workers = 1
     print(f"🚀 Starting ThreadPoolExecutor with {max_workers} workers", flush=True)
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         executor.map(process_symbol, files)
