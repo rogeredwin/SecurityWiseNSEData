@@ -36,7 +36,7 @@ day_to_alphabets = {
 }
 
 # === Get today's day name ===
-today_day = datetime.datetime.today(ist).strftime('%A')
+today_day = datetime.today(ist).strftime('%A')
 allowed_letters = day_to_alphabets.get(today_day, [])
 
 print(f"📅 Today is {today_day}")
