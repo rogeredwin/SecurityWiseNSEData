@@ -81,9 +81,10 @@ def getDeliveryDataFromNSE(symbol):
                         print(f"⚠️ Failed to parse CSV: {symbol}_{start_date}_{end_date} | Error: {parse_error}", flush=True)
                 else:
                     print(f"❌ HTTP Error: {symbol}_{start_date}_{end_date} | Status: {response.status_code}", flush=True)
+                    time.sleep(10)
             except Exception as e:
                 print(f"💥 Request Exception: {symbol}_{start_date}_{end_date} | Error: {e}", flush=True)
-            time.sleep(2)
+                time.sleep(10)
     if not delivery_data_df.empty:
         delivery_data_df['SYMBOL'] = delivery_data_df['SYMBOL'].astype(str).str.strip()
         delivery_data_df['SERIES'] = delivery_data_df['SERIES'].astype(str).str.strip()
