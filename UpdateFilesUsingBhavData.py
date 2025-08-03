@@ -108,7 +108,20 @@ symbolchange_df["New Symbol"] = symbolchange_df["New Symbol"].astype(str).str.st
 def updateFiles(date):
     key_cols = ['SYMBOL', 'SERIES', 'DATE1']
     bhavDataFilePath = "BhavData" +  "//" + datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d") + "_NSE.csv"
-    bhavfile_df = pd.read_csv(bhavDataFilePath)
+    try:
+        bhavfile_df = pd.read_csv(bhavDataFilePath)  # Adjust sep if needed
+    except pd.errors.ParserError as e:
+        print(f"[ParserError] Failed to parse CSV at {bhavDataFilePath}: {e}")
+        log_failure(f"[ParserError] Failed to parse CSV at {bhavDataFilePath}: {e}")
+        return
+    except FileNotFoundError:
+        print(f"[FileNotFound] File not found: {bhavDataFilePath}")
+        log_failure(f"[FileNotFound] File not found: {bhavDataFilePath}")
+        return
+    except Exception as e:
+        print(f"[UnknownError] Something went wrong reading {bhavDataFilePath}: {e}")
+        log_failure(f"[UnknownError] Something went wrong reading {bhavDataFilePath}: {e}")
+        return
     date = datetime.strptime(date, "%Y-%m-%d").strftime("%d-%b-%Y")
     bhavfile_df.columns = bhavfile_df.columns.str.strip()
     bhavfile_df['SYMBOL'] = bhavfile_df['SYMBOL'].astype(str).str.strip()
