@@ -206,9 +206,9 @@ dates = {beforeYesterdayDate, yesterdayDate, todayDate}
 
 for date in dates:
     bhavDataFilePath = "BhavData" +  "//" + datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d") + "_NSE.csv"
+    # if os.path.exists(bhavDataFilePath):
+    #   continue
+    # else:
+    download_bhavdata(date)
     if os.path.exists(bhavDataFilePath):
-       continue
-    else:
-        download_bhavdata(date)
-        if os.path.exists(bhavDataFilePath):
-            updateFiles(date)
+        updateFiles(date)
