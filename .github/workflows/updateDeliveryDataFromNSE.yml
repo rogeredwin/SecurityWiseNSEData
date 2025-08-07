@@ -2,7 +2,7 @@ name: Run Update Delivery Data From NSE
 
 on:
   schedule:
-    - cron: '30 14 * * 5'   # run every Friday 8pm IST
+    - cron: '30 14 * * *'   # run every Friday 8pm IST
   workflow_dispatch:
 
 permissions:
