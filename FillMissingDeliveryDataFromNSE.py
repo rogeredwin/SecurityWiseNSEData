@@ -7,6 +7,10 @@ import pytz
 import time
 from concurrent.futures import ThreadPoolExecutor
 import glob
+import random
+import sys
+
+count = 0
 
 # Print working directory and files
 print("🔍 Current working directory:", os.getcwd(), flush=True)
@@ -102,6 +106,9 @@ def getDeliveryDataFromNSE(symbol):
     return delivery_data_df
 
 def process_symbol(symbolFile):
+    global count
+    if count >= 25:
+        sys.exit()
     # print(f"🟢 Processing: {symbolFile}", flush=True)
     symbol_path = symbolFile
     symbolFile = symbolFile.replace("SecurityWiseData/", "")
@@ -125,7 +132,7 @@ def process_symbol(symbolFile):
         # print(f"ℹ️ No missing delivery data in {symbolFile}", flush=True)
         print(f"Complete: {symbol_path}", flush = True)
         return
-
+    count += 1
     delivery_data_df = getDeliveryDataFromNSE(symbolFile[:-4])
     if delivery_data_df.empty:
         # print(f"⚠️ No delivery data fetched for {symbolFile[:-4]}", flush=True)
@@ -155,6 +162,7 @@ def process_symbol(symbolFile):
 def main():
     try:
         files = glob.glob(os.path.join(securityWiseDataFolder, "*.csv"))
+        files = random.shuffle(files)
         # print(f"📦 CSV files found: {files}", flush=True)
     except Exception as e:
         print(f"❌ Failed to list files in {securityWiseDataFolder}: {e}", flush=True)
