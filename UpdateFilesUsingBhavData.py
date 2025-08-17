@@ -201,8 +201,9 @@ def updateFiles(date):
 todayDate = datetime.now(ist).strftime("%Y-%m-%d")
 yesterdayDate = (datetime.now(ist) - timedelta(days=1)).strftime("%Y-%m-%d")
 beforeYesterdayDate = (datetime.now(ist) - timedelta(days=2)).strftime("%Y-%m-%d")
+evenBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=3)).strftime("%Y-%m-%d")
 
-dates = {beforeYesterdayDate, yesterdayDate, todayDate}
+dates = {evenBeforeYesterdayDate, beforeYesterdayDate, yesterdayDate, todayDate}
 
 for date in dates:
     bhavDataFilePath = "BhavData" +  "//" + datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d") + "_NSE.csv"
