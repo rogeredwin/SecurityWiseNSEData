@@ -201,9 +201,18 @@ def updateFiles(date):
 todayDate = datetime.now(ist).strftime("%Y-%m-%d")
 yesterdayDate = (datetime.now(ist) - timedelta(days=1)).strftime("%Y-%m-%d")
 beforeYesterdayDate = (datetime.now(ist) - timedelta(days=2)).strftime("%Y-%m-%d")
-evenBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=3)).strftime("%Y-%m-%d")
+oneDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=3)).strftime("%Y-%m-%d")
+twoDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=4)).strftime("%Y-%m-%d")
+threeDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=5)).strftime("%Y-%m-%d")
+fourDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=6)).strftime("%Y-%m-%d")
+fiveDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=7)).strftime("%Y-%m-%d")
+sixDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=8)).strftime("%Y-%m-%d")
+sevenDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=9)).strftime("%Y-%m-%d")
+eightDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=10)).strftime("%Y-%m-%d")
+nineDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=11)).strftime("%Y-%m-%d")
+tenDBeforeYesterdayDate = (datetime.now(ist) - timedelta(days=12)).strftime("%Y-%m-%d")
 
-dates = {evenBeforeYesterdayDate, beforeYesterdayDate, yesterdayDate, todayDate}
+dates = {tenDBeforeYesterdayDate, nineDBeforeYesterdayDate, eightDBeforeYesterdayDate, sevenDBeforeYesterdayDate, sixDBeforeYesterdayDate, fiveDBeforeYesterdayDate, fourDBeforeYesterdayDate, threeDBeforeYesterdayDate, twoDBeforeYesterdayDate, oneDBeforeYesterdayDate, beforeYesterdayDate, yesterdayDate, todayDate}
 
 for date in dates:
     bhavDataFilePath = "BhavData" +  "//" + datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d") + "_NSE.csv"
