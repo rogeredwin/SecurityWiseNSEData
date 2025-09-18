@@ -27,7 +27,7 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git add SecurityWiseData/*.csv
-        git commit -m "Normalize DATE1 column to DD-MM-YYYY" || echo "No changes to commit"
+        git commit -m "Sort rows by column Date1" || echo "No changes to commit"
         git push
       env:
         # This is automatically handled for GitHub-hosted runners
